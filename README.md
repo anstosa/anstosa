@@ -6,6 +6,24 @@ I design and build products end to end, from interfaces that make complex decisi
 
 I'm currently building at [Potato](https://github.com/readysetpotato). Previously: [Carbon Robotics](https://github.com/carbonrobotics), [Pioneer Square Labs](https://github.com/PioneerSquareLabs), and [ExtraHop](https://github.com/ExtraHop).
 
+## Engineering decisions & impact
+
+### Shipping ML without adding a model-serving platform
+
+For my weather platform, I separated Python-based model development from deterministic TypeScript inference rather than introducing a dedicated model server. Exported model artifacts keep training dependencies out of the request path, while validation and raw-forecast fallback prevent a correction model from becoming an availability dependency.
+
+The recorded temperature evaluation showed 19.54% lower mean absolute error across 25,968 events. That result comes from a frozen-forward replay using development data, not an independent prospective production trial.
+
+Architecture, evaluation, and limitations → (https://github.com/anstosa/weather#4-applied-machine-learning)
+
+### Extending existing workflows instead of replacing them
+
+For Remote Agent Console, I built around existing coding-agent CLIs and tmux rather than creating another execution runtime. I separated agent, worktree, and conversation identities, while centralizing terminal effects and target validation behind a shared runtime boundary.
+
+This preserves established CLI workflows while giving integrations a common place to enforce delivery, authorization, and recovery behavior. The architecture deliberately targets one trusted operator rather than introducing distributed infrastructure or implying multi-tenant guarantees.
+
+Design constraints and architectural decisions → (https://github.com/anstosa/remoteagents#1-problem-statement-and-design-constraints)
+
 ## Selected engineering work
 
 ### [Ferry FYI](https://github.com/anstosa/ferry.fyi) · [Live product](https://ferry.fyi)
